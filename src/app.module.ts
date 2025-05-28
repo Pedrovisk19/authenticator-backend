@@ -1,22 +1,24 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-// import { YourEntity } from './your-entity-folder/your.entity';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from './entities/user.entity';
+import { UserService } from './services/user.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'postgres', // ou 'mysql', 'sqlite', etc.
-      host: 'localhost',
+      type: "postgres", // ou 'mysql', 'sqlite', etc.
+      host: "localhost",
       port: 5432,
-      username: 'seu_usuario',
-      password: 'sua_senha',
-      database: 'nome_do_banco',
-      // entities: [YourEntity],
+      username: "nestuser",
+      password: "nestpass",
+      database: "nestdb",
+      imports: [TypeOrmModule.forFeature([User])],
+      providers: [UserService],
       synchronize: true, // use com cautela em produção
       autoLoadEntities: true,
     }),
-    // TypeOrmModule.forFeature([YourEntity]), // importa repositórios para usar em serviços
+    TypeOrmModule.forFeature([User]), // importa repositórios para usar em serviços
   ],
 })
 export class AppModule {}
