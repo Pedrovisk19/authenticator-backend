@@ -1,32 +1,25 @@
 version: '3.8'
 
 services:
-  nest-app:
+  api:
     build: .
-    container_name: nest-app
-    restart: unless-stopped
     ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    volumes:
-      - .:/app
-      - /app/node_modules
-
-  postgres:
-    image: postgres:15
-    container_name: nest-postgres
-    restart: unless-stopped
+      - '3002:3001'
     environment:
-      POSTGRES_DB: nestdb
-      POSTGRES_USER: nestuser
-      POSTGRES_PASSWORD: nestpass
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=nest
+    depends_on:
+      - db
 
-volumes:
-  postgres_data:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nest
+    ports:
+      - '5432:5432'

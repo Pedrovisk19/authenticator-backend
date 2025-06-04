@@ -1,22 +1,19 @@
-# Etapa 1 - Build
-FROM node:20-alpine as build
+# Usar imagem Node oficial
+FROM node:18
 
-WORKDIR /app
+# Criar diretório da aplicação
+WORKDIR /usr/src/app
 
+# Copiar package.json e instalar dependências
 COPY package*.json ./
 RUN npm install
 
+# Copiar código restante
 COPY . .
+
+# Build (se usar TS direto)
 RUN npm run build
 
-# Etapa 2 - Produção
-FROM node:20-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install --only=production
-
-COPY --from=build /app/dist ./dist
-
-CMD ["node", "dist/main.js"]
+# Expor porta 3001 e rodar app
+EXPOSE 3001
+CMD ["npm", "run", "start:prod"]

@@ -1,3 +1,25 @@
-@baseUrl = http://localhost:5432;
+@baseUrl = http://localhost:3002
 
-GET {{{baseUrl}}}/users
+GET {{baseUrl}}/users/
+
+###
+
+GET {{baseUrl}}/users/2
+
+###
+POST {{baseUrl}}/users/
+Content-Type: application/json
+
+{
+  "name": "alo"
+}
+
+###
+
+PATCH  {{baseUrl}}/users/2
+Content-Type: application/json
+
+{
+  "name": "alo updated",
+  "email": "pedro@update.com"
+}
