@@ -4,10 +4,10 @@ services:
   api:
     build: .
     ports:
-      - '3002:3001'
+      - '3002:3002'
     environment:
       - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      - DATABASE_PORT=5433
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_NAME=nest
@@ -22,4 +22,4 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: nest
     ports:
-      - '5432:5432'
+      - '5433:5433'

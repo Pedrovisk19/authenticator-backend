@@ -7,18 +7,20 @@ GET {{baseUrl}}/users/
 GET {{baseUrl}}/users/2
 
 ###
-POST {{baseUrl}}/users/
+POST {{baseUrl}}/users/create
 Content-Type: application/json
 
 {
-  "name": "alo"
-}
+  "name": "alo",
+  "email": "pedro@gmail.com",
+  "password": "123456"
+  }
 
 ###
 
 PATCH  {{baseUrl}}/users/2
 Content-Type: application/json
-
+ 
 {
   "name": "alo updated",
   "email": "pedro@update.com"

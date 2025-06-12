@@ -34,24 +34,16 @@ export class UserService {
   }
 
   // Encontra um usuário
-  findOne(id: string) {
-    const user = this.users.find((user) => user.id === id);
+  async findOne(id: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
     if (user) return user;
     throw new Error(`User not found`);
   }
 
-  create(createUserDto: CreateUserDto) {
-    this.lastId++;
-    const id = this.lastId;
-    const newUser: User = {
-      id: id.toString(),
-      ...createUserDto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      primeiroAcesso: true, 
-    };
-    this.users.push(newUser); // <-- Adiciona o novo usuário à lista
-    return newUser;
+  async create(createUserDto: CreateUserDto) {
+
+   return await this.userRepository.save(createUserDto);
+    // return newUser;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
@@ -65,5 +57,11 @@ export class UserService {
       ...usuarioAtualizado,
       ...updateUserDto,
     };
+  }
+
+  async delete(userId: number) {
+
+   return await this.userRepository.delete(userId);
+    // return newUser;
   }
 }
