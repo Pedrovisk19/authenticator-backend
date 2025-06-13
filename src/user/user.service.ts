@@ -6,6 +6,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -34,6 +35,12 @@ export class UserService {
   }
 
   // Encontra um usuário
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (user) return user;
+    throw new Error(`User not found`);
+  }
+
   async findOne(id: string) {
     const user = await this.userRepository.findOne({ where: { id } });
     if (user) return user;
@@ -41,13 +48,23 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-   return await this.userRepository.save(createUserDto);
+    const user = {
+      ...createUserDto,
+      password: hashedPassword,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      primeiroAcesso: false, 
+    }
+
+   return await this.userRepository.save(user);
     // return newUser;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     const user = this.users.findIndex((user) => user.id === id);
+    
 
     if (!user) throw new Error(`User not found`);
 
