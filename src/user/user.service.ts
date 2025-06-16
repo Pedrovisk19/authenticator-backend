@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prettier/prettier */
-import { Body, Injectable } from "@nestjs/common";
+import { Body, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { User } from "./entities/user.entity";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -12,8 +12,8 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>, 
-  ) {}
+    private readonly userRepository: Repository<User>,
+  ) { }
   private lastId = 1;
   private users: User[] = [
     {
@@ -23,7 +23,7 @@ export class UserService {
       password: "123456",
       createdAt: new Date(),
       updatedAt: new Date(),
-      primeiroAcesso: true, 
+      primeiroAcesso: true,
     },
   ];
 
@@ -48,6 +48,14 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    const userExists = await this.userRepository.findOne({ where: { email: createUserDto.email } });
+    if (userExists) {
+      throw new HttpException(
+        `Usuário já cadastrado com o email: ${createUserDto.email}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
     const user = {
@@ -55,16 +63,16 @@ export class UserService {
       password: hashedPassword,
       createdAt: new Date(),
       updatedAt: new Date(),
-      primeiroAcesso: false, 
+      primeiroAcesso: false,
     }
 
-   return await this.userRepository.save(user);
+    return await this.userRepository.save(user);
     // return newUser;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     const user = this.users.findIndex((user) => user.id === id);
-    
+
 
     if (!user) throw new Error(`User not found`);
 
@@ -78,7 +86,7 @@ export class UserService {
 
   async delete(userId: number) {
 
-   return await this.userRepository.delete(userId);
+    return await this.userRepository.delete(userId);
     // return newUser;
   }
 }
