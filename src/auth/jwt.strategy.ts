@@ -12,8 +12,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: 'jwt_secret', // usar variável de ambiente
     });
   }
-
+  
   async validate(payload: any) {
+    
     return { userId: payload.sub, email: payload.email };
   }
 }
