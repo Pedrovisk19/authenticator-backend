@@ -4,10 +4,18 @@ import * as nodemailer from 'nodemailer';
 import { ConfigService } from '@nestjs/config';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { Repository } from 'typeorm';
+import { EmailToken } from './entities/email-token.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EmailService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+
+    @InjectRepository(EmailToken)
+    private emailTokenRepo: Repository<EmailToken>,
+  ) { }
 
   async sendPasswordResetEmail(to: string, name: string, resetLink: string) {
     // 1. Lê o template HTML
@@ -40,4 +48,29 @@ export class EmailService {
       html,
     });
   }
+
+  async saveToken(email: string, token: string, expiresInMinutes = 15) {
+    const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
+
+    const emailToken = this.emailTokenRepo.create({ email, token, expiresAt });
+    return this.emailTokenRepo.save(emailToken);
+  }
+
+  
+  async findByToken(token: string) {
+    const emailToken = await this.emailTokenRepo.findOne({ where: { token } });
+
+    if (!emailToken) {
+      throw new Error('Token inválido');
+    }
+
+    const now = new Date();
+    if (emailToken.expiresAt < now) {
+      await this.emailTokenRepo.delete({ email: emailToken.email });
+      throw new Error('Token expirado');
+    }
+
+    return emailToken;
+  }
+
 }

@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -27,6 +28,7 @@ export class UserService {
     },
   ];
 
+
   // Encontra todos os usuários
   async findAll() {
     const users = await this.userRepository.find();
@@ -38,7 +40,7 @@ export class UserService {
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     if (user) return user;
-    
+
     throw new Error(`User not found`);
   }
 
@@ -84,6 +86,22 @@ export class UserService {
       ...updateUserDto,
     };
   }
+
+  async updatePassword(id: string | number, newPassword: string) {
+    const user = await this.userRepository.findOne({ where: { id: String(id) } });
+
+    if (!user) {
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    user.updatedAt = new Date();
+
+    return await this.userRepository.save(user);
+  }
+
 
   async delete(userId: number) {
 

@@ -6,11 +6,13 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
     UserModule,
     PassportModule,
+    EmailModule,
     JwtModule.register({
       secret: 'jwt_secret', // ideal: usar variável de ambiente
       signOptions: { expiresIn: '1h' },
