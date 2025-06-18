@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3002
-
+@token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBlcGVvYjEyQGdtYWlsLmNvbSIsInN1YiI6MjMsImlhdCI6MTc1MDIxNDA5OSwiZXhwIjoxNzUwMjE3Njk5fQ.i8IneqONnyxiHn_tEK7bbvp7AL-95fApVjCBdT_-Wbw'
 GET {{baseUrl}}/users/
 
 ###
@@ -25,3 +25,8 @@ Content-Type: application/json
   "name": "alo updated",
   "email": "pedro@update.com"
 }
+
+###
+
+GET {{baseUrl}}/user-permissions/get-permission
+Authorization: Bearer {{token}}

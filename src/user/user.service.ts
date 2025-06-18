@@ -102,10 +102,7 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-
   async delete(userId: number) {
-
     return await this.userRepository.delete(userId);
-    // return newUser;
   }
 }

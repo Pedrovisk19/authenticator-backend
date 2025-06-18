@@ -10,6 +10,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { PermissionsModule } from 'src/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -43,9 +44,11 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         },
       },
     }),
+
     UserModule,
     AuthModule,
     EmailModule,
+    PermissionsModule
   ],
   controllers: [AppController],
   providers: [AppService],
