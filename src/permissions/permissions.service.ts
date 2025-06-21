@@ -10,14 +10,22 @@ export class PermissionsService {
   constructor(
     @InjectRepository(UserPermissions)
     private userPermissionRepository: Repository<UserPermissions>
-  ) {}
-  
-  async getPermission(userId: any) {
-    return this.userPermissionRepository.find({where: userId})
+  ) { }
+
+  getPermission(userId: number) {
+
+    const userPermission = this.userPermissionRepository.findOne({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return userPermission;
+
   }
 
-  async savePermission(data: any) {
-    return this.userPermissionRepository.save(data)
+  savePermission(data: any) {
+    return this.userPermissionRepository.save(data);
   }
-  
+
 }

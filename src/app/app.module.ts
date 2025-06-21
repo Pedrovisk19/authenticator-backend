@@ -11,6 +11,7 @@ import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { PermissionsModule } from 'src/permissions/permissions.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -44,7 +45,7 @@ import { PermissionsModule } from 'src/permissions/permissions.module';
         },
       },
     }),
-
+    ConfigModule.forRoot({ isGlobal: true }), 
     UserModule,
     AuthModule,
     EmailModule,

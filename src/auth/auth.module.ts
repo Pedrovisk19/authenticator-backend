@@ -1,14 +1,15 @@
 // src/auth/auth.module.ts
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
+import { EmailModule } from 'src/email/email.module';
+import { PermissionsService } from 'src/permissions/permissions.service';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
-import { EmailModule } from 'src/email/email.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './jwt.strategy';
+import { PermissionsModule } from 'src/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     UserModule,
     PassportModule,
     EmailModule,
+    PermissionsModule,
     JwtModule.register({
       secret: 'jwt_secret', // ideal: usar variável de ambiente
       signOptions: { expiresIn: '1h' },
