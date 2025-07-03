@@ -8,10 +8,10 @@ services:
     environment:
       - PORT=3002
       - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      - DATABASE_PORT=5433
       - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_NAME=nest
+      - DATABASE_PASSWORD=123456
+      - DATABASE_NAME=postgres
     depends_on:
       - db
 
@@ -20,7 +20,8 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: nest
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
     ports:
       - '5433:5432'
+ 

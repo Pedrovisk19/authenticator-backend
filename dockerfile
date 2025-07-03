@@ -14,6 +14,6 @@ COPY . .
 # Build (se usar TS direto)
 RUN npm run build
 
-# Expor porta 3001 e rodar app
-EXPOSE 3002
+# Expor porta 3005 e rodar app
+EXPOSE 3005
 CMD ["npm", "run", "start:prod"]
